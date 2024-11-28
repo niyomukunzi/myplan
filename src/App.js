@@ -1,100 +1,62 @@
 import React, { useState, useEffect, useContext, createContext } from 'react';
 
-const UserContext = createContext();
+const CountContext = createContext();
 
-const Manager = () => {
-  
-  const [name, setName] = useState('');
-  
-  const [users, setUsers] = useState([]);
-
-  
-  useEffect(() => {
-    console.log('User list updated', users);
-  }, [users]);
-
-  
-  const handleAddUser = () => {
-    setUsers(prevUsers => [...prevUsers, { id: Date.now(), name }]);
-    setName('');
-   
-  };
+const CountProvider = ({ children }) => {
+  const [count, setCount] = useState(0);
 
   return (
-    <UserContext.Provider value={{ users, setUsers }}>
-      <div style={styles.container}>
-        <h1>Name: NIYOMUKUNZI Esther</h1>
-        <h1>Class: L5SOD</h1>
-        <p>hooks :are functions that let you use state and other React features in functional components</p>
-        <p>useState: A React hook that lets you add state to functional components.</p>
-
-           <p>useEffect: A React hook that lets you perform side effects in functional components.</p>
-
-           <p>useContext: A React hook that lets you use context to pass data through the component tree without passing props manuall</p>
-
-        <button style={styles.button} onClick={handleAddUser}>Add User</button>
-        <h1>User Management</h1>
-        <div style={styles.inputContainer}>
-          <input
-            style={styles.input}
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Enter user name"
-          />
-          <button style={styles.button} onClick={handleAddUser}>Add user</button>
-        </div>
-        <UserList />
-      </div>
-    </UserContext.Provider>
+    <CountContext.Provider value={{ count, setCount }}>
+      {children}
+    </CountContext.Provider>
   );
 };
 
-const UserList = () => {
-  const { users } = useContext(UserContext);
+const App = () => {
+  const { count, setCount } = useContext(CountContext);
 
   return (
-    <ul style={styles.userList}>
-      {users.map(user => (
-        <li key={user.id} style={styles.userItem}>{user.name}</li>
-      ))}
-    </ul>
+    <div style={styles.container}>
+      <h1>name: Uwimaniduhaye Adeline</h1>
+      <h1>class: L5SOD</h1>
+      <h1>
+        Hooks are special functions that let you use state and other React features without writing a class. They were introduced in React 16.8 and have since become an essential part of React development.
+      </h1>
+      <h1>Count: {count}</h1>
+      <button style={styles.button} onClick={() => setCount(count + 1)}>Increment</button>
+      <button style={styles.button} onClick={() => setCount(count - 1)}>Decrement</button>
+      <button style={styles.button} onClick={() => setCount(0)}>Reset</button>
+    </div>
   );
 };
+
+const Root = () => (
+  <CountProvider>
+    <App />
+  </CountProvider>
+);
 
 const styles = {
   container: {
+    textAlign: 'center',
+    color: '#00796b',
+    backgroundColor: '#e0f7fa', /* Sky cyan */
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center',
     justifyContent: 'center',
+    alignItems: 'center',
     height: '100vh',
-    backgroundColor: 'skyblue',
-  },
-  inputContainer: {
-    display: 'flex',
-    gap: '10px',
-    marginBottom: '20px',
-  },
-  input: {
-    padding: '10px',
-    fontSize: '1rem',
+    margin: '0',
   },
   button: {
+    backgroundColor: '#4fc3f7', /* Light cyan */
+    border: 'none',
     padding: '10px 20px',
-    fontSize: '1rem',
-  },
-  userList: {
-    listStyle: 'none',
-    padding: 0,
-  },
-  userItem: {
-    padding: '10px',
-    backgroundColor: 'skyblue',
-    borderRadius: '5px',
-    marginBottom: '5px',
-    boxShadow: '0 0 10px rgba(0,0,0,0.1)',
-  },
+    margin: '5px',
+    cursor: 'pointer',
+    fontSize: '16px',
+    color: 'white',
+  }
 };
 
-export default Manager;
+export default Root;
